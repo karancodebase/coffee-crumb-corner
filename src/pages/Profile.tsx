@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,9 +26,14 @@ const Profile = () => {
   const [paymentMethod, setPaymentMethod] = useState<"stripe" | "crypto" | "upi">("stripe");
 
   useEffect(() => {
-    // Simulate loading profile data
+    // Simulate loading profile data from localStorage (temporary until Supabase is connected)
     setTimeout(() => {
-      if (username === "john") {
+      // Check if profile data exists in localStorage
+      const savedProfile = localStorage.getItem(`profile_${username}`);
+      if (savedProfile) {
+        setProfile(JSON.parse(savedProfile));
+      } else if (username === "john") {
+        // Keep the existing mock data for john
         setProfile({
           username: "john",
           displayName: "John Developer",

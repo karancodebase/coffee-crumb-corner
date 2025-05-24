@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,9 +25,10 @@ const Setup = () => {
     }
     
     setUsernameStatus("checking");
-    // Simulate API call - will be implemented with Supabase
+    // Check if username already exists in localStorage
     setTimeout(() => {
-      const taken = ["admin", "test", "user"].includes(username.toLowerCase());
+      const existingProfile = localStorage.getItem(`profile_${username}`);
+      const taken = ["admin", "test", "user"].includes(username.toLowerCase()) || existingProfile !== null;
       setUsernameStatus(taken ? "taken" : "available");
     }, 500);
   };
@@ -41,7 +41,20 @@ const Setup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // Save to database and redirect to profile
+    
+    // Save profile data to localStorage (temporary until Supabase is connected)
+    const profileData = {
+      username: formData.username,
+      displayName: formData.displayName,
+      bio: formData.bio,
+      walletAddress: formData.walletAddress,
+      upiId: formData.upiId,
+      stripeEmail: formData.stripeEmail
+    };
+    
+    localStorage.setItem(`profile_${formData.username}`, JSON.stringify(profileData));
+    
+    // Redirect to profile page
     navigate(`/${formData.username}`);
   };
 
